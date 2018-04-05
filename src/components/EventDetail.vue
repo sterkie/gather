@@ -18,8 +18,9 @@
             </div>
         </div>
         <div>
-
+            <DateDecider :suggestedDates="suggestedDates" :participants="participants" class="date-decider" />
         </div>
+        <hr>
         <div>
             <h4 class="is-size-4">Participants:</h4>
             <ul>
@@ -30,8 +31,12 @@
 </template>
 
 <script>
+import DateDecider from "./DateDecider.vue";
 export default {
   props: ["id"],
+  components: {
+    DateDecider
+  },
   computed: {
     user() {
       return this.$store.getters.user;
@@ -46,6 +51,9 @@ export default {
     },
     participants() {
       return this.$store.getters.event(this.id).participants;
+    },
+    suggestedDates() {
+      return this.$store.getters.event(this.id).suggestedDates;
     }
   },
   methods: {
@@ -61,5 +69,9 @@ export default {
 </script>
 
 <style scoped>
-
+.date-decider {
+  max-width: 100%;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
 </style>

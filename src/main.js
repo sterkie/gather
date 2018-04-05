@@ -4,10 +4,12 @@ import * as firebase from "firebase";
 import { routes } from "./router";
 import App from "./App.vue";
 import { store } from "./store";
+import DateFilter from "./filters/date";
 
 import "./assets/styles/main.scss";
 
 Vue.use(Router);
+Vue.filter("date", DateFilter);
 
 firebase.initializeApp({
   apiKey: "AIzaSyBeBuX2YqhkSpiWDFf2YZLVXSZ-z6Q4fzc",

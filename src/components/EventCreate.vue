@@ -9,6 +9,9 @@
                 <input type="text" placeholder="enter a location for the event" v-model="location" class="input">
             </div>
             <div class="field">
+                <DatePicker :multi="true" v-model="suggestedDates" />
+            </div>
+            <div class="field">
                 <button class="button is-small is-outlined is-info" type="submit">ADD EVENT</button> -----
                 <button class="button is-small is-outlined is-warning" @click="cancelCreate" type="reset">CANCEL</button>
             </div>
@@ -17,12 +20,17 @@
 </template>
 
 <script>
+import DatePicker from "./DatePicker.vue";
 export default {
   name: "EventCreate",
+  components: {
+    DatePicker
+  },
   data() {
     return {
       title: "",
-      location: ""
+      location: "",
+      suggestedDates: []
     };
   },
   methods: {
@@ -32,7 +40,8 @@ export default {
         location: this.location,
         creatorId: this.$store.getters.user.id,
         creatorName: this.$store.getters.user.username,
-        createdAt: new Date()
+        createdAt: new Date(),
+        suggestedDates: this.suggestedDates
       };
       this.$store.dispatch("addEvent", tempEvent);
     },

@@ -45,7 +45,8 @@ const actions = {
           creatorId: obj[key].creatorId,
           creatorName: obj[key].creatorName,
           createdAt: obj[key].createdAt,
-          participants: obj[key].participants
+          participants: obj[key].participants,
+          suggestedDates: obj[key].suggestedDates
         });
       }
       commit("loadAllEvents", events);
@@ -66,7 +67,8 @@ const actions = {
       location: payload.location,
       creatorId: payload.creatorId,
       creatorName: payload.creatorName,
-      createdAt: payload.createdAt
+      createdAt: payload.createdAt,
+      suggestedDates: payload.suggestedDates
     };
 
     // Add creator to event participants list
