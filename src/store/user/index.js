@@ -7,6 +7,15 @@ const state = {
 const mutations = {
   setUser(state, payload) {
     state.user = payload;
+  },
+  registerUserForEvent(state, payload) {
+    state.user.registeredEvents = {
+      ...state.user.registeredEvents,
+      [payload.id]: { title: payload.title, id: payload.id }
+    };
+  },
+  unregisterUserForEvent(state, payload) {
+    delete state.user.registeredEvents[payload.id];
   }
 };
 
@@ -73,32 +82,78 @@ const actions = {
   },
 
   registerUserForEvent({ commit, getters }, payload) {
-    const registeredEvents = {
-      ...(getters.user.registeredEvents || {}),
-      [payload.id]: payload
-    };
-
+    let registeredEvents = {};
+    if (getters.user.registeredEvents === undefined) {
+      registeredEvents = {
+        [payload.id]: { title: payload.title, id: payload.id }
+      };
+    } else {
+      registeredEvents = {
+        ...getters.user.registeredEvents,
+        [payload.id]: { title: payload.title, id: payload.id }
+      };
+    }
     // add event to users/id/registeredEvents
     firebase
       .database()
       .ref("/users/" + getters.user.id)
       .child("registeredEvents")
       .update(registeredEvents)
-      .then(console.log("added to registeredEvents"))
+      .catch(e => console.log(e))
+      .then(commit("registerUserForEvent", payload))
       .catch(e => console.log(e));
     // add user to events/id/participants
-    firebase
-      .database()
-      .ref("events/" + payload.id)
-      .child("participants")
-      .update({
+    let participants = {};
+    if (payload.participants === undefined) {
+      participants = {
+        [getters.user.id]: {
+          username: getters.user.username,
+          id: getters.user.id
+        }
+      };
+    } else {
+      participants = {
         ...payload.participants,
         [getters.user.id]: {
           username: getters.user.username,
           id: getters.user.id
         }
-      })
-      .then(console.log("added to participants"))
+      };
+    }
+
+    firebase
+      .database()
+      .ref("events/" + payload.id)
+      .child("participants")
+      .update(participants)
+      .then(
+        commit("addParticipant", {
+          eventId: payload.id,
+          userId: getters.user.id,
+          userName: getters.user.username
+        })
+      )
+      .catch(e => console.log(e));
+  },
+
+  unregisterUserForEvent({ commit, getters }, payload) {
+    firebase
+      .database()
+      .ref("users/" + getters.user.id)
+      .child("registeredEvents/" + payload.id)
+      .remove()
+      .then(commit("unregisterUserForEvent", payload))
+      .catch(e => console.log(e));
+    firebase
+      .database()
+      .ref("events/" + payload.id + "/participants/" + getters.user.id)
+      .remove()
+      .then(
+        commit("removeParticipant", {
+          userId: getters.user.id,
+          eventId: payload.id
+        })
+      )
       .catch(e => console.log(e));
   }
 };

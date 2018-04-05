@@ -7,7 +7,7 @@
                 </h3>
             </div>
             <div class="level-right">
-                <div class="level-item">
+                <div class="level-item" v-if="user">
                     <template v-if="!isParticipant">
                         <button class="button is-outlined is-info" @click="registerForEvent">Register for event</button>
                     </template>
@@ -32,18 +32,17 @@
 <script>
 export default {
   props: ["id"],
-  data() {
-    return {
-      //   event: {},
-      //   participants: {}
-    };
-  },
   computed: {
+    user() {
+      return this.$store.getters.user;
+    },
     event() {
       return this.$store.getters.event(this.id);
     },
     isParticipant() {
-      return this.participants.hasOwnProperty(this.$store.getters.user.id);
+      if (this.participants !== undefined) {
+        return this.participants.hasOwnProperty(this.$store.getters.user.id);
+      } else return false;
     },
     participants() {
       return this.$store.getters.event(this.id).participants;
@@ -51,21 +50,13 @@ export default {
   },
   methods: {
     registerForEvent() {
-      //   this.$store.dispatch("registerUserForEvent", this.event);
-      this.$store.commit("addParticipant", {
-        eventId: this.event.id,
-        userId: this.$store.getters.user.id,
-        userName: this.$store.getters.user.username
-      });
+      this.$store.dispatch("registerUserForEvent", this.event);
     },
     unregisterForEvent() {
-      this.$store.commit("removeParticipant", {
-        eventId: this.event.id,
-        userId: this.$store.getters.user.id
-      });
+      this.$store.dispatch("unregisterUserForEvent", this.event);
     }
   },
-  created() {}
+  mounted() {}
 };
 </script>
 

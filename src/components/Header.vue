@@ -3,7 +3,7 @@
         <div class="container">
             <div class="navbar-brand">
                 <router-link class="navbar-item" to="/">
-                    <h3 class="title">EVENTOR</h3>
+                    <h3 class="title has-text-weight-light">GATHER</h3>
                 </router-link>
             </div>
             <div class="navbar-menu">

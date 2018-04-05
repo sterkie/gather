@@ -2,13 +2,13 @@
     <div class="container">
         <form @submit.prevent="registerUser">
             <div class="field">
-                <input type="text" placeholder="Enter your email..." v-model="email">
+                <input type="text" placeholder="Enter your email..." v-model="email" class="input">
             </div>
             <div class="field">
-                <input type="password" placeholder="Enter your password...." v-model="password">
+                <input type="password" placeholder="Enter your password...." v-model="password" class="input">
             </div>
             <div class="field">
-                <input type="text" placeholder="Enter desired username" v-model="username">
+                <input type="text" placeholder="Enter desired username" v-model="username" class="input">
             </div>
             <div class="field">
                 <button class="button is-small is-outlined is-info" type="submit">REGISTER</button>
@@ -27,6 +27,18 @@ export default {
       password: "",
       username: ""
     };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.user;
+    }
+  },
+  watch: {
+    user(value) {
+      if ((value !== null) & (value !== undefined)) {
+        this.$router.push("/");
+      }
+    }
   },
   methods: {
     registerUser() {
