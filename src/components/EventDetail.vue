@@ -51,10 +51,18 @@ export default {
   },
   methods: {
     registerForEvent() {
-      this.$store.dispatch("registerUserForEvent", this.event);
+      //   this.$store.dispatch("registerUserForEvent", this.event);
+      this.$store.commit("addParticipant", {
+        eventId: this.event.id,
+        userId: this.$store.getters.user.id,
+        userName: this.$store.getters.user.username
+      });
     },
     unregisterForEvent() {
-      console.log("unregistered");
+      this.$store.commit("removeParticipant", {
+        eventId: this.event.id,
+        userId: this.$store.getters.user.id
+      });
     }
   },
   created() {}

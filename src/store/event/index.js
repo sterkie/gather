@@ -8,8 +8,26 @@ const mutations = {
   loadAllEvents(state, payload) {
     state.events = payload;
   },
+
   addEvent(state, payload) {
     state.events.push(payload);
+  },
+
+  addParticipant(state, payload) {
+    const index = state.events.findIndex(event => event.id === payload.eventId);
+    const event = state.events.find(event => event.id === payload.eventId);
+    event.participants = {
+      ...event.participants,
+      [payload.userId]: { id: payload.userId, username: payload.userName }
+    };
+    state.events.splice(index, 1, event);
+  },
+
+  removeParticipant(state, payload) {
+    const index = state.events.findIndex(event => event.id === payload.eventId);
+    const event = state.events.find(event => event.id === payload.eventId);
+    delete event.participants[payload.userId];
+    state.events.splice(index, 1, event);
   }
 };
 
