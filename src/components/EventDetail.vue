@@ -18,7 +18,7 @@
             </div>
         </div>
         <div>
-            <DateDecider :suggestedDates="suggestedDates" :participants="participants" class="date-decider" />
+            <DateDecider class="date-decider" :event="event" />
         </div>
         <hr>
         <div>

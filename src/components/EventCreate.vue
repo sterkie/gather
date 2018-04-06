@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import DatePicker from "./DatePicker.vue";
 export default {
   name: "EventCreate",
@@ -35,13 +36,17 @@ export default {
   },
   methods: {
     addEvent() {
+      const processedDates = [];
+      this.suggestedDates.map(date => {
+        processedDates.push(moment(date).format("YYYY-MM-DD"));
+      });
       const tempEvent = {
         title: this.title,
         location: this.location,
         creatorId: this.$store.getters.user.id,
         creatorName: this.$store.getters.user.username,
         createdAt: new Date(),
-        suggestedDates: this.suggestedDates
+        suggestedDates: processedDates
       };
       this.$store.dispatch("addEvent", tempEvent);
     },

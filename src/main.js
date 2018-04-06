@@ -8,7 +8,14 @@ import DateFilter from "./filters/date";
 
 import "./assets/styles/main.scss";
 
+import Buefy from "buefy";
+import "buefy/lib/buefy.css";
+
+import lodash from "lodash";
+Object.defineProperty(Vue.prototype, "$lodash", { value: lodash });
+
 Vue.use(Router);
+Vue.use(Buefy);
 Vue.filter("date", DateFilter);
 
 firebase.initializeApp({

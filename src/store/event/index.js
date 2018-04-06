@@ -28,6 +28,11 @@ const mutations = {
     const event = state.events.find(event => event.id === payload.eventId);
     delete event.participants[payload.userId];
     state.events.splice(index, 1, event);
+  },
+
+  setAvailableDates(state, payload) {
+    const event = state.events.find(event => event.id === payload.eventId);
+    event.participants[payload.userId].availableDates = payload.dates;
   }
 };
 
@@ -95,6 +100,28 @@ const actions = {
         title: tempEvent.title,
         location: tempEvent.location
       });
+  },
+
+  submitAvailableDates({ commit, getters }, payload) {
+    const dates = payload.dates;
+    const eventId = payload.event.id;
+    firebase
+      .database()
+      .ref("events/" + eventId + "/participants/" + getters.user.id)
+      .child("availableDates")
+      .set(payload.dates)
+      .then(
+        commit("setAvailableDates", {
+          eventId: eventId,
+          dates: dates,
+          userId: getters.user.id
+        })
+      );
+    firebase
+      .database()
+      .ref("users/" + getters.user.id + "/registeredEvents/")
+      .child(eventId)
+      .set({ id: eventId, title: payload.event.name, availableDates: dates });
   }
 };
 
