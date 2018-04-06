@@ -3,7 +3,7 @@
         <p class="is-size-6">You are currently marked as:
             <strong>{{isParticipant ? 'attending' : 'not attending'}}</strong>
         </p>
-        <div class="date-selection-container" v-if="isParticipant">
+        <div class="date-selection-container" v-if="!hasConfirmedDates && isParticipant">
             <p class="subtitle">Please select the days you're available at: </p>
             <b-checkbox v-model="editedDates" :native-value="sd" v-for="(sd, index) in orderedDates" :key="index">
                 {{sd | date}}
@@ -11,7 +11,10 @@
             <div class="field">
                 <button class="button is-outlined is-info is-small" @click="submitAvailableDates">confirm</button>
             </div>
+            <hr>
+
         </div>
+        <div :style="{'background-color': 'orange'}" v-if="hasConfirmedDates && isParticipant">i have confirmed</div>
     </div>
 </template>
 
@@ -39,9 +42,7 @@ export default {
       return this.$store.getters.event(this.$route.params.id).participants;
     },
     orderedDates() {
-      return this.$lodash.sortBy(this.event.suggestedDates, o => {
-        return o;
-      });
+      return this.$lodash.sortBy(this.event.suggestedDates, o => o);
     },
     user() {
       return this.$store.getters.user;
@@ -51,6 +52,10 @@ export default {
       return rE !== undefined && rE !== null
         ? rE.hasOwnProperty(this.user.id)
         : false;
+    },
+    hasConfirmedDates() {
+      let co = this.$store.getters.user.registeredEvents[this.$route.params.id];
+      return co !== undefined && co !== null ? co.confirmed : false;
     }
   }
 };

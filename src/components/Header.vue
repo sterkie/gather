@@ -7,20 +7,23 @@
                 </router-link>
             </div>
             <div class="navbar-menu">
-                <div class="navbar-end">
-                    <router-link class="navbar-item" to="/events">
+                <!-- <div class="navbar-start">
+                    <p class="navbar-item" :style="{'margin-top': '6px'}" v-if="user">welcome {{user.username}}</p>
+                </div> -->
+                <div class="navbar-end ">
+                    <router-link class="navbar-item " to="/events">
                         Events
                     </router-link>
-                    <router-link class="navbar-item" to="/events/create">
+                    <router-link class="navbar-item " to="/events/create">
                         Create Event
                     </router-link>
-                    <router-link class="navbar-item" to="/login">
+                    <router-link class="navbar-item " to="/login">
                         Login
                     </router-link>
-                    <router-link class="navbar-item" to="/register">
+                    <router-link class="navbar-item " to="/register">
                         Register
                     </router-link>
-                    <a class="navbar-item" @click="logOut">
+                    <a class="navbar-item " @click="logOut ">
                         Logout
                     </a>
 
@@ -37,6 +40,11 @@ export default {
     logOut() {
       this.$store.dispatch("logOut");
       this.$router.push("/");
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.getters.user;
     }
   }
 };
