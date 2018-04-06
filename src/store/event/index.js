@@ -105,6 +105,8 @@ const actions = {
   submitAvailableDates({ commit, getters }, payload) {
     const dates = payload.dates;
     const eventId = payload.event.id;
+    const eventTitle = payload.event.title;
+
     firebase
       .database()
       .ref("events/" + eventId + "/participants/" + getters.user.id)
@@ -117,11 +119,24 @@ const actions = {
           userId: getters.user.id
         })
       );
+
     firebase
       .database()
       .ref("users/" + getters.user.id + "/registeredEvents/")
       .child(eventId)
-      .set({ id: eventId, title: payload.event.name, availableDates: dates });
+      .set({
+        id: eventId,
+        title: eventTitle,
+        availableDates: dates,
+        confirmed: true
+      })
+      .then(
+        commit("submitAvailableDates", {
+          dates: dates,
+          eventId: payload.event.id,
+          title: eventTitle
+        })
+      );
   }
 };
 

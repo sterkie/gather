@@ -11,11 +11,28 @@ const mutations = {
   registerUserForEvent(state, payload) {
     state.user.registeredEvents = {
       ...state.user.registeredEvents,
-      [payload.id]: { title: payload.title, id: payload.id }
+      [payload.id]: {
+        title: payload.title,
+        id: payload.id,
+        availableDates: [],
+        confirmed: false
+      }
     };
   },
   unregisterUserForEvent(state, payload) {
     delete state.user.registeredEvents[payload.id];
+  },
+
+  submitAvailableDates(state, payload) {
+    state.user.registeredEvents = {
+      ...state.user.registeredEvents,
+      [payload.eventId]: {
+        title: payload.title,
+        id: payload.eventId,
+        availableDates: payload.dates,
+        confirmed: true
+      }
+    };
   }
 };
 
@@ -63,7 +80,7 @@ const actions = {
     const tempUser = {
       id: payload.uid,
       username: "",
-      registeredEvents: []
+      registeredEvents: {}
     };
     commit("setUser", tempUser);
   },
@@ -85,12 +102,12 @@ const actions = {
     let registeredEvents = {};
     if (getters.user.registeredEvents === undefined) {
       registeredEvents = {
-        [payload.id]: { title: payload.title, id: payload.id }
+        [payload.id]: { title: payload.title, id: payload.id, confirmed: false }
       };
     } else {
       registeredEvents = {
         ...getters.user.registeredEvents,
-        [payload.id]: { title: payload.title, id: payload.id }
+        [payload.id]: { title: payload.title, id: payload.id, confirmed: false }
       };
     }
     // add event to users/id/registeredEvents

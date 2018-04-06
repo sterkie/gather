@@ -3,7 +3,7 @@
         <p class="is-size-6">You are currently marked as:
             <strong>{{isParticipant ? 'attending' : 'not attending'}}</strong>
         </p>
-        <div class="participant--section" v-if="isParticipant">
+        <div class="date-selection-container" v-if="isParticipant">
             <p class="subtitle">Please select the days you're available at: </p>
             <b-checkbox v-model="editedDates" :native-value="sd" v-for="(sd, index) in orderedDates" :key="index">
                 {{sd | date}}
@@ -30,13 +30,13 @@ export default {
       let sorted = this.$lodash.sortBy(this.editedDates, o => o);
       this.$store.dispatch("submitAvailableDates", {
         dates: this.editedDates,
-        eventId: this.event.id
+        event: this.event
       });
     }
   },
   computed: {
     participants() {
-      return this.event.participants;
+      return this.$store.getters.event(this.$route.params.id).participants;
     },
     orderedDates() {
       return this.$lodash.sortBy(this.event.suggestedDates, o => {
@@ -47,7 +47,7 @@ export default {
       return this.$store.getters.user;
     },
     isParticipant() {
-      let rE = this.participants;
+      let rE = this.$store.getters.event(this.$route.params.id).participants;
       return rE !== undefined && rE !== null
         ? rE.hasOwnProperty(this.user.id)
         : false;
