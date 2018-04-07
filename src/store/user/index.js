@@ -16,13 +16,14 @@ const mutations = {
         id: payload.id,
         availableDates: [],
         confirmed: false
+        // iscreator: payload.iscreator
       }
     };
   },
   unregisterUserForEvent(state, payload) {
     delete state.user.registeredEvents[payload.id];
   },
-
+  // /users/user_id/registeredEvents/
   submitAvailableDates(state, payload) {
     state.user.registeredEvents = {
       ...state.user.registeredEvents,

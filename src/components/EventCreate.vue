@@ -11,6 +11,9 @@
             <div class="field">
                 <DatePicker :multi="true" v-model="suggestedDates" />
             </div>
+            <b-field label="Description">
+                <b-input minlength="10" maxlength="200" type="textarea" v-model="description"></b-input>
+            </b-field>
             <div class="field">
                 <button class="button is-small is-outlined is-info" type="submit">ADD EVENT</button> -----
                 <button class="button is-small is-outlined is-warning" @click="cancelCreate" type="reset">CANCEL</button>
@@ -31,7 +34,8 @@ export default {
     return {
       title: "",
       location: "",
-      suggestedDates: []
+      suggestedDates: [],
+      description: ""
     };
   },
   methods: {
@@ -43,6 +47,7 @@ export default {
       const tempEvent = {
         title: this.title,
         location: this.location,
+        description: this.description,
         creatorId: this.$store.getters.user.id,
         creatorName: this.$store.getters.user.username,
         createdAt: new Date(),

@@ -2,10 +2,21 @@
     <div class="container" v-if="event">
         <div class="level">
             <div class="level-left">
-                <h3 class="title">
-                    the event page for {{event.title}}
-                </h3>
+                <div class="level-item">
+
+                    <p class="is-size-4">
+                        Event:
+                    </p>
+                    <p class="is-size-5 has-text-weight-light">
+                        {{event.title}}
+                    </p>
+
+                </div>
+                <div class="level-item attending-badge">
+                    <span class="tag" :class="isParticipant ? 'is-success' : 'is-danger'"> {{isParticipant ? 'Attending' : 'Not attending'}}</span>
+                </div>
             </div>
+
             <div class="level-right">
                 <div class="level-item" v-if="user">
                     <template v-if="!isParticipant">
@@ -17,15 +28,25 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <p>
+                {{event.description}}
+            </p>
+        </div>
+        <div>
+            <h3 class="heading">
+                {{event.status}}
+            </h3>
+        </div>
         <div>
             <DateDecider class="date-decider" :event="event" />
         </div>
-        <hr>
         <div class="show-decider">
             <div class="columns">
                 <div class="column is-2"></div>
                 <div class="column has-text-centered" v-for="(date,index) in event.suggestedDates" :key="index">
-                    {{date}}
+                    {{date | shortdate}}
                 </div>
             </div>
             <div class="columns" v-for="pa in event.participants" :key="pa.id">
@@ -42,6 +63,7 @@
                 <li v-for="pa in event.participants" :key="pa.id">{{pa.username}}</li>
             </ul>
         </div>
+
     </div>
 </template>
 
@@ -71,8 +93,12 @@ export default {
       return this.$store.getters.event(this.id).suggestedDates;
     },
     hasConfirmedDates() {
-      let co = this.$store.getters.user.registeredEvents[this.$route.params.id];
-      return co !== undefined && co !== null ? co.confirmed : false;
+      if (this.$store.getters.user.registeredEvents !== undefined) {
+        let co = this.$store.getters.user.registeredEvents[
+          this.$route.params.id
+        ];
+        return co !== undefined && co !== null ? co.confirmed : false;
+      } else return false;
     }
   },
   methods: {
@@ -92,9 +118,8 @@ export default {
 </script>
 
 <style scoped>
-.date-decider {
-  max-width: 100%;
-  margin-top: 32px;
-  margin-bottom: 32px;
+.attending-badge {
+  margin-top: 6px;
+  margin-left: 18px;
 }
 </style>

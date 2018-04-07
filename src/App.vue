@@ -2,16 +2,19 @@
     <div>
         <Header />
         <router-view></router-view>
+        <!-- <Footer /> -->
     </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
+// import Footer from "./components/Footer.vue";
 import * as firebase from "firebase";
 export default {
   name: "App",
   components: {
     Header
+    // Footer
   },
   mounted() {
     if (
@@ -30,5 +33,7 @@ export default {
 </script>
 
 <style scoped>
-
+body {
+  height: 100%;
+}
 </style>

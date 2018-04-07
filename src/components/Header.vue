@@ -7,23 +7,20 @@
                 </router-link>
             </div>
             <div class="navbar-menu">
-                <!-- <div class="navbar-start">
+                <div class="navbar-start">
                     <p class="navbar-item" :style="{'margin-top': '6px'}" v-if="user">welcome {{user.username}}</p>
-                </div> -->
+                </div>
                 <div class="navbar-end ">
-                    <router-link class="navbar-item " to="/events">
+                    <router-link class="navbar-item " to="/events" v-if="user !== null">
                         Events
                     </router-link>
-                    <router-link class="navbar-item " to="/events/create">
-                        Create Event
-                    </router-link>
-                    <router-link class="navbar-item " to="/login">
+                    <router-link class="navbar-item " to="/login" v-if="!user">
                         Login
                     </router-link>
-                    <router-link class="navbar-item " to="/register">
+                    <router-link class="navbar-item " to="/register" v-if="!user">
                         Register
                     </router-link>
-                    <a class="navbar-item " @click="logOut ">
+                    <a class="navbar-item " @click="logOut " v-if="user !== null">
                         Logout
                     </a>
 

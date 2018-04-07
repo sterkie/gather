@@ -4,7 +4,7 @@ import * as firebase from "firebase";
 import { routes } from "./router";
 import App from "./App.vue";
 import { store } from "./store";
-import DateFilter from "./filters/date";
+import { monthday, shortdate } from "./filters/date";
 
 import "./assets/styles/main.scss";
 
@@ -16,7 +16,8 @@ Object.defineProperty(Vue.prototype, "$lodash", { value: lodash });
 
 Vue.use(Router);
 Vue.use(Buefy);
-Vue.filter("date", DateFilter);
+Vue.filter("monthday", monthday);
+Vue.filter("shortdate", shortdate);
 
 firebase.initializeApp({
   apiKey: "AIzaSyBeBuX2YqhkSpiWDFf2YZLVXSZ-z6Q4fzc",

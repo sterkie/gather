@@ -51,7 +51,9 @@ const actions = {
           creatorName: obj[key].creatorName,
           createdAt: obj[key].createdAt,
           participants: obj[key].participants,
-          suggestedDates: obj[key].suggestedDates
+          suggestedDates: obj[key].suggestedDates,
+          status: obj[key].status,
+          description: obj[key].description
         });
       }
       commit("loadAllEvents", events);
@@ -69,11 +71,13 @@ const actions = {
     const tempEvent = {
       id: newEventKey,
       title: payload.title,
+      description: payload.description,
       location: payload.location,
       creatorId: payload.creatorId,
       creatorName: payload.creatorName,
       createdAt: payload.createdAt,
-      suggestedDates: payload.suggestedDates
+      suggestedDates: payload.suggestedDates,
+      status: "voting"
     };
 
     // Add creator to event participants list
@@ -99,7 +103,13 @@ const actions = {
         id: newEventKey,
         title: tempEvent.title,
         location: tempEvent.location
-      });
+      })
+      .then(
+        commit("registerUserForEvent", {
+          id: newEventKey,
+          title: tempEvent.title
+        })
+      );
   },
 
   submitAvailableDates({ commit, getters }, payload) {
@@ -142,7 +152,9 @@ const actions = {
 
 const getters = {
   events(state) {
-    return state.events;
+    return state.events.sort((eventA, eventB) => {
+      return eventA.createdAt > eventB.createdAt;
+    });
   },
   event(state) {
     return id => {

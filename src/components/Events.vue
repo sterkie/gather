@@ -13,12 +13,12 @@
                     </div>
                 </div>
             </div>
-            <template v-if="events.length > 0">
-                <div v-for="event in events" :key="event.id" class="box" @click="loadEvent(event.id)">
+            <template v-if="sortedEvents.length > 0">
+                <div v-for="event in sortedEvents" :key="event.id" class="box" @click="loadEvent(event.id)">
                     {{event.title}} - {{event.location}} - {{event.creatorName}}
                 </div>
             </template>
-            <template v-if="events.length < 1">
+            <template v-if="sortedEvents.length < 1">
                 <div>
                     there are currently no events planned!
                 </div>
@@ -35,6 +35,9 @@ export default {
   computed: {
     events() {
       return this.$store.getters.events;
+    },
+    sortedEvents() {
+      return this.events.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     },
     user() {
       return this.$store.getters.user;

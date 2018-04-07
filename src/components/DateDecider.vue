@@ -1,21 +1,15 @@
 <template>
-    <div class="decider-container box">
-        <p class="is-size-6">You are currently marked as:
-            <strong>{{isParticipant ? 'attending' : 'not attending'}}</strong>
-        </p>
-        <div class="date-selection-container" v-if="!hasConfirmedDates && isParticipant">
-            <p class="subtitle">Please select the days you're available at: </p>
-            <b-checkbox v-model="editedDates" :native-value="sd" v-for="(sd, index) in orderedDates" :key="index">
-                {{sd | date}}
-            </b-checkbox>
-            <div class="field">
-                <button class="button is-outlined is-info is-small" @click="submitAvailableDates">confirm</button>
-            </div>
-            <hr>
-
+    <div class="columns" v-if="!hasConfirmedDates && isParticipant">
+        <div class="column is-2 has-text-centered">
+            <button class="button is-outlined is-info is-small" @click="submitAvailableDates">confirm</button>
         </div>
-        <div :style="{'background-color': 'orange'}" v-if="hasConfirmedDates && isParticipant">i have confirmed</div>
+        <div class="column has-text-centered" v-for="(sd, index) in orderedDates" :key="index">
+            <b-checkbox v-model="editedDates" :native-value="sd">
+            </b-checkbox>
+        </div>
     </div>
+    <!-- <div :style="{'background-color': 'orange'}" v-if="hasConfirmedDates && isParticipant">i have confirmed</div> -->
+
 </template>
 
 <script>
@@ -54,8 +48,12 @@ export default {
         : false;
     },
     hasConfirmedDates() {
-      let co = this.$store.getters.user.registeredEvents[this.$route.params.id];
-      return co !== undefined && co !== null ? co.confirmed : false;
+      if (this.$store.getters.user.registeredEvents !== undefined) {
+        let co = this.$store.getters.user.registeredEvents[
+          this.$route.params.id
+        ];
+        return co !== undefined && co !== null ? co.confirmed : false;
+      } else return false;
     }
   }
 };
