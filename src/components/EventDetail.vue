@@ -21,6 +21,21 @@
             <DateDecider class="date-decider" :event="event" />
         </div>
         <hr>
+        <div class="show-decider">
+            <div class="columns">
+                <div class="column is-2"></div>
+                <div class="column has-text-centered" v-for="(date,index) in event.suggestedDates" :key="index">
+                    {{date}}
+                </div>
+            </div>
+            <div class="columns" v-for="pa in event.participants" :key="pa.id">
+                <div class="column is-2 has-text-centered">{{pa.username}}</div>
+                <div class="column has-text-centered" v-for="(sd, index) in event.suggestedDates" :key="index">
+                    <div>{{isElement(pa.availableDates, sd) ? 'V' : 'X'}}</div>
+                </div>
+            </div>
+        </div>
+        <hr>
         <div>
             <h4 class="is-size-4">Participants:</h4>
             <ul>
@@ -54,6 +69,10 @@ export default {
     },
     suggestedDates() {
       return this.$store.getters.event(this.id).suggestedDates;
+    },
+    hasConfirmedDates() {
+      let co = this.$store.getters.user.registeredEvents[this.$route.params.id];
+      return co !== undefined && co !== null ? co.confirmed : false;
     }
   },
   methods: {
@@ -62,6 +81,10 @@ export default {
     },
     unregisterForEvent() {
       this.$store.dispatch("unregisterUserForEvent", this.event);
+    },
+
+    isElement(pa, sd) {
+      return this.$lodash.includes(pa, sd);
     }
   },
   mounted() {}
