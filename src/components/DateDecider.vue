@@ -1,6 +1,6 @@
 <template>
     <div class="columns" v-if="!hasConfirmedDates && isParticipant">
-        <div class="column is-2 has-text-centered">
+        <div class="column is-2 ">
             <button class="button is-outlined is-info is-small" @click="submitAvailableDates">confirm</button>
         </div>
         <div class="column has-text-centered" v-for="(sd, index) in orderedDates" :key="index">

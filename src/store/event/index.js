@@ -38,7 +38,10 @@ const mutations = {
 
 const actions = {
   loadAllEvents({ commit }) {
-    const eventsRef = firebase.database().ref("events");
+    const eventsRef = firebase
+      .database()
+      .ref("events")
+      .orderByChild("createdAt");
     eventsRef.once("value").then(data => {
       const events = [];
       const obj = data.val();
@@ -152,9 +155,7 @@ const actions = {
 
 const getters = {
   events(state) {
-    return state.events.sort((eventA, eventB) => {
-      return eventA.createdAt > eventB.createdAt;
-    });
+    return state.events;
   },
   event(state) {
     return id => {

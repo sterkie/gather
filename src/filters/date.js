@@ -5,5 +5,5 @@ export const monthday = value => {
 };
 
 export const shortdate = value => {
-  return moment(value).format("dd MMM Do");
+  return moment(value).format("ddd MMM Do");
 };

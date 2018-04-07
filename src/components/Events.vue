@@ -37,7 +37,7 @@ export default {
       return this.$store.getters.events;
     },
     sortedEvents() {
-      return this.events.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+      return this.$lodash.sortBy(this.events, "createdAt").reverse();
     },
     user() {
       return this.$store.getters.user;
